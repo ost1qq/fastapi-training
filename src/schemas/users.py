@@ -6,6 +6,7 @@ class Role(str, Enum):
     DISPATCHER = "DISPATCHER"
 
 class User(BaseModel):
+    id: int
     username: str
     password: str
     role: Role

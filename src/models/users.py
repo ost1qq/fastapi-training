@@ -1,15 +1,22 @@
-from sqlalchemy import Column, Integer, String, Enum
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import String, Enum as SqlEnum
 from src.database import Base
-import enum
+from enum import Enum
+from typing import TYPE_CHECKING
 
-class Role(str, enum.Enum):
-    DISPATCHER = "DISPATCHER"
+if TYPE_CHECKING:
+    from models.requests import RequestModel
+
+class Role(str, Enum):
     HOUSEHOLDER = "HOUSEHOLDER"
+    DISPATCHER = "DISPATCHER"
 
 class UserModel(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True)
-    username = Column(String, unique=True, nullable=False)
-    password = Column(String, nullable=False)
-    role = Column(Enum(Role), nullable=False)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    username: Mapped[str] = mapped_column(String(100), unique=True)
+    password: Mapped[str]
+    role: Mapped[Role] = mapped_column(SqlEnum(Role))
+
+    requests: Mapped[list["RequestModel"]] = relationship(back_populates="user")
