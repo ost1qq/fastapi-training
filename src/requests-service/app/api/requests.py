@@ -1,9 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import NoResultFound
-from src.database import get_session
-from src.repositories.requests import RequestRepository
-from src.schemas.requests import RequestCreate, RequestUpdate
+from app.database import get_session
+from app.repositories.requests import RequestRepository
+from app.schemas.requests import RequestCreate, RequestUpdate
+
+#must be reworked
 from src.api.auth import get_current_user
 from src.schemas.users import User
 from src.models.users import Role

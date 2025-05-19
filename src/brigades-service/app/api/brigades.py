@@ -1,12 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import NoResultFound
-from src.database import get_session
-from src.repositories.brigades import BrigadeRepository
-from src.schemas.brigades import Brigade, BrigadeUpdate
-from src.api.auth import get_current_user
-from src.schemas.users import User
-from src.models.users import Role
+from app.database import get_session
+from app.repositories.brigades import BrigadeRepository
+from app.schemas.brigades import Brigade, BrigadeUpdate
+
+#must be reworked
+from app.api.auth import get_current_user
+from app.schemas.users import User
+from app.models.users import Role
 
 router = APIRouter(prefix="/brigades", tags=["Brigades"])
 

@@ -1,6 +1,6 @@
-from src.schemas.requests import RequestCreate
-from src.models.requests import RequestModel
-from src.repositories.base import BaseRepository
+from app.schemas.requests import RequestCreate
+from app.models.requests import RequestModel
+from app.repositories.base import BaseRepository
 
 class RequestRepository(BaseRepository):
     model = RequestModel

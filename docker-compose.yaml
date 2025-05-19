@@ -1,0 +1,79 @@
+version: '3.9'
+services:
+  workplans:
+    build: ./services/workplans
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:adminpassword@workplans_db:5432/workplans_service
+      USERS_SERVICE_URL: http://users:8003
+    ports:
+      - '8001:8000'
+    depends_on:
+      - workplans_db
+      - users
+    networks: [backend]
+
+  brigades:
+    build: ./services/brigades
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:adminpassword@brigades_db:5432/brigades_service
+    ports:
+      - '8002:8000'
+    depends_on:
+      - brigades_db
+    networks: [backend]
+
+  users:
+    build: ./services/users
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:adminpassword@users_db:5432/users_service
+    ports:
+      - '8003:8000'
+    depends_on:
+      - users_db
+    networks: [backend]
+
+  requests:
+    build: ./services/requests
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:adminpassword@requests_db:5432/requests_service
+    ports:
+      - '8004:8000'
+    depends_on:
+      - requests_db
+    networks: [backend]
+
+  workplans_db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: adminpassword
+      POSTGRES_DB: workplans_service
+    networks: [backend]
+
+  brigades_db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: adminpassword
+      POSTGRES_DB: brigades_service
+    networks: [backend]
+
+  users_db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: adminpassword
+      POSTGRES_DB: users_service
+    networks: [backend]
+
+  requests_db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: adminpassword
+      POSTGRES_DB: requests_service
+    networks: [backend]
+
+networks:
+  backend:
+    driver: bridge

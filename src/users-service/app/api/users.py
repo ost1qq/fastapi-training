@@ -1,14 +1,17 @@
-from fastapi import Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from src.database import get_session
-from src.models.users import UserModel
-from src.schemas.users import User
+from app.database import get_session
+from app.models.users import UserModel
+from app.schemas.users import User
+
+router = APIRouter()
 
 security = HTTPBasic()
 
-async def get_current_user(
+@router.post("/auth", summary="Check user credentials")
+async def auth_user(
     credentials: HTTPBasicCredentials = Depends(security),
     session: AsyncSession = Depends(get_session)
 ) -> User:
