@@ -1,45 +1,44 @@
-version: '3.9'
 services:
-  workplans:
-    build: ./services/workplans
+  requests:
+    build: ./src/requests-service/Dockerfile
     environment:
-      DATABASE_URL: postgresql+asyncpg://postgres:adminpassword@workplans_db:5432/workplans_service
-      USERS_SERVICE_URL: http://users:8003
+      DATABASE_URL: postgresql+asyncpg://postgres:adminpassword@requests_db:5432/requests_service
     ports:
-      - '8001:8000'
+      - '8001:8001'
     depends_on:
-      - workplans_db
-      - users
+      - requests_db
     networks: [backend]
 
   brigades:
-    build: ./services/brigades
+    build: ./src/brigades-service/Dockerfile
     environment:
       DATABASE_URL: postgresql+asyncpg://postgres:adminpassword@brigades_db:5432/brigades_service
     ports:
-      - '8002:8000'
+      - '8002:8002'
     depends_on:
       - brigades_db
     networks: [backend]
 
   users:
-    build: ./services/users
+    build: ./src/users-service/Dockerfile
     environment:
       DATABASE_URL: postgresql+asyncpg://postgres:adminpassword@users_db:5432/users_service
     ports:
-      - '8003:8000'
+      - '8003:8003'
     depends_on:
       - users_db
     networks: [backend]
 
-  requests:
-    build: ./services/requests
+  workplans:
+    build: ./src/workplans-service/Dockerfile
     environment:
-      DATABASE_URL: postgresql+asyncpg://postgres:adminpassword@requests_db:5432/requests_service
+      DATABASE_URL: postgresql+asyncpg://postgres:adminpassword@workplans_db:5432/workplans_service
+      USERS_SERVICE_URL: http://users:8003
     ports:
-      - '8004:8000'
+      - '8004:8004'
     depends_on:
-      - requests_db
+      - workplans_db
+      - users
     networks: [backend]
 
   workplans_db:

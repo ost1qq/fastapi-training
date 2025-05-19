@@ -5,7 +5,7 @@ from app.schemas.users import User
 
 security = HTTPBasic()
 
-USERS_SERVICE_URL = "http://users-service:8000"
+USERS_SERVICE_URL = "http://users-service:8003"
 
 async def get_current_user(credentials: HTTPBasicCredentials = Depends(security)) -> User:
     async with httpx.AsyncClient() as client:

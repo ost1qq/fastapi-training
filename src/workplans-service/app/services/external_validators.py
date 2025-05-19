@@ -1,8 +1,8 @@
 import httpx
 from fastapi import HTTPException
 
-REQUESTS_SERVICE_URL = "http://requests-service:8000"
-BRIGADES_SERVICE_URL = "http://brigades-service:8000"
+REQUESTS_SERVICE_URL = "http://requests-service:8001"
+BRIGADES_SERVICE_URL = "http://brigades-service:8002"
 
 async def validate_request_exists(request_id: int):
     async with httpx.AsyncClient() as client:
