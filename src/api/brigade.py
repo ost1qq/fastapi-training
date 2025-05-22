@@ -1,17 +1,18 @@
 from typing import List
-from datetime import datetime
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from pydantic import BaseModel
 
-router = APIRouter()
+router = APIRouter(tags=["Brigades"])
 
 brigades = []
+
 
 class BrigadeCreate(BaseModel):
     name: str
     workers: List[str]
 
-@router.post("/brigades", tags=["Brigades"], summary="Create a new brigade")
+
+@router.post("/brigades", summary="Create a new brigade")
 def create_brigade(new_brigade: BrigadeCreate):
     brigade_id = str(len(brigades) + 1)
     brigade_data = new_brigade.dict()

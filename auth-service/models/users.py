@@ -1,12 +1,14 @@
 from sqlalchemy import Column, Integer, String, Enum
-from src.database import Base
 import enum
+import database_core
+
 
 class Role(str, enum.Enum):
     DISPATCHER = "DISPATCHER"
     HOUSEHOLDER = "HOUSEHOLDER"
 
-class UserModel(Base):
+
+class UserModel(database_core.Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)

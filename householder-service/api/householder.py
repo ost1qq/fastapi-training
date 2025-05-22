@@ -1,10 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException
+from typing import Annotated
+from fastapi import APIRouter, Depends, Security, HTTPException
+
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import NoResultFound
-from src.models.users import Role
-from src.api.auth import get_current_user
-from src.schemas.users import User
-from src.schemas.householder import HouseholderSchemaNew, HouseholderSchemaUpdate
-from src.repositories.householder import (
+
+from api.auth_dependency import current_dispatcher
+from schemas.householder import HouseholderSchemaNew, HouseholderSchemaUpdate
+from api.householder_service import (
     get_all_householders,
     get_householder_by_id,
     create_householder,
@@ -12,28 +14,21 @@ from src.repositories.householder import (
     delete_householder,
     delete_all_householders,
 )
+from database_core import get_session
 
-from fastapi import Depends
-from sqlalchemy.ext.asyncio import AsyncSession
-from src.database import get_session
-
-router = APIRouter()
+router = APIRouter(tags=["Householders"], dependencies=[Security(current_dispatcher)])
 
 
-@router.get("/householders", tags=["Householders"], summary="Get all householders")
+@router.get("/householders", summary="Get all householders")
 async def route_get_householders(
     session: AsyncSession = Depends(get_session),
-    current_user: User = Depends(get_current_user),
 ):
-    print(current_user.role)
-    if current_user.role != Role.DISPATCHER:
-        raise HTTPException(status_code=403, detail="Forbidden")
+
     return await get_all_householders(session)
 
 
 @router.get(
     "/householders/{householder_id}",
-    tags=["Householders"],
     summary="Get a specific householder",
 )
 async def route_get_householder(
@@ -45,7 +40,7 @@ async def route_get_householder(
         raise HTTPException(status_code=404, detail="Householder not found")
 
 
-@router.post("/householders", tags=["Householders"], summary="Create new householder")
+@router.post("/householders", summary="Create new householder")
 async def route_create_householder(
     new_householder: HouseholderSchemaNew, session: AsyncSession = Depends(get_session)
 ):
@@ -55,7 +50,6 @@ async def route_create_householder(
 
 @router.put(
     "/householders/{householder_id}",
-    tags=["Householders"],
     summary="Update an existing householder",
 )
 async def route_update_householder(
@@ -74,7 +68,6 @@ async def route_update_householder(
 
 @router.delete(
     "/householders/{householder_id}",
-    tags=["Householders"],
     summary="Delete a specific householder",
 )
 async def route_delete_householder(
@@ -87,9 +80,7 @@ async def route_delete_householder(
         raise HTTPException(status_code=404, detail="Householder not found")
 
 
-@router.delete(
-    "/householders", tags=["Householders"], summary="Delete all householders"
-)
+@router.delete("/householders", summary="Delete all householders")
 async def route_delete_all_householders(session: AsyncSession = Depends(get_session)):
     await delete_all_householders(session)
     return {"message": "All householders deleted"}

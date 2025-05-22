@@ -8,9 +8,10 @@ from src.schemas.users import User
 
 security = HTTPBasic()
 
+
 async def get_current_user(
     credentials: HTTPBasicCredentials = Depends(security),
-    session: AsyncSession = Depends(get_session)
+    session: AsyncSession = Depends(get_session),
 ) -> User:
     stmt = select(UserModel).where(UserModel.username == credentials.username)
     result = await session.execute(stmt)
@@ -23,5 +24,5 @@ async def get_current_user(
         id=user_obj.id,
         username=user_obj.username,
         password=user_obj.password,
-        role=user_obj.role
+        role=user_obj.role,
     )

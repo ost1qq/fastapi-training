@@ -7,11 +7,13 @@ router = APIRouter()
 
 requests = []
 
+
 class RequestCreate(BaseModel):
     householder_id: str
     work_type: str
     scale: str
     preferred_time: datetime
+
 
 @router.post("/requests", tags=["Requests"], summary="Submit a new work request")
 def create_request(new_request: RequestCreate):
