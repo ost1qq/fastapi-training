@@ -21,6 +21,16 @@ services:
     depends_on:
       - postgres-microservices
 
+  householder-service:
+    container_name: householder-service
+    build: ./householder-service
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./householder-service:/app
+    depends_on:
+      - postgres-microservices
+
   brigade-service:
     container_name: brigade-service
     build: ./brigade-service
@@ -31,12 +41,22 @@ services:
     depends_on:
       - postgres-microservices
 
-  householder-service:
-    container_name: householder-service
-    build: ./householder-service
+  request-service:
+    container_name: request-service
+    build: ./request-service
     ports:
-      - "8002:8002"
+      - "8004:8004"
     volumes:
-      - ./householder-service:/app
+      - ./request-service:/app
+    depends_on:
+      - postgres-microservices
+
+  work-plan-service:
+    container_name: work-plan-service
+    build: ./work-plan-service
+    ports:
+      - "8005:8005"
+    volumes:
+      - ./work-plan-service:/app
     depends_on:
       - postgres-microservices
