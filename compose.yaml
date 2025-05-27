@@ -1,33 +1,23 @@
 services:
   postgres-microservices:
-    container_name: postgres
+    container_name: postgres1
     image: postgres:16.3-alpine3.20
     ports:
-      - "5432:5432"
+      - '5432:5432'
     environment:
       PGUSER: postgres
       PGPASSWORD: adminpassword
       POSTGRES_HOST_AUTH_METHOD: trust
     volumes:
       - ./postgres-data:/var/lib/postgresql
-  
+
   auth-service:
     container_name: auth-service
     build: ./auth-service
     ports:
-      - "8001:8001"
+      - '8001:8001'
     volumes:
       - ./auth-service:/app
-    depends_on:
-      - postgres-microservices
-
-  householder-service:
-    container_name: householder-service
-    build: ./householder-service
-    ports:
-      - "8002:8002"
-    volumes:
-      - ./householder-service:/app
     depends_on:
       - postgres-microservices
 
@@ -35,7 +25,7 @@ services:
     container_name: brigade-service
     build: ./brigade-service
     ports:
-      - "8003:8003"
+      - '8003:8003'
     volumes:
       - ./brigade-service:/app
     depends_on:
@@ -45,7 +35,7 @@ services:
     container_name: request-service
     build: ./request-service
     ports:
-      - "8004:8004"
+      - '8004:8004'
     volumes:
       - ./request-service:/app
     depends_on:
@@ -55,7 +45,7 @@ services:
     container_name: work-plan-service
     build: ./work-plan-service
     ports:
-      - "8005:8005"
+      - '8005:8005'
     volumes:
       - ./work-plan-service:/app
     depends_on:

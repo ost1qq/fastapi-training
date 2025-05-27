@@ -19,3 +19,12 @@ async def current_dispatcher(
         if role != "DISPATCHER":
             raise HTTPException(status_code=403, detail="Forbidden")
     return response.json()
+
+async def get_current_user(
+    credentials: HTTPBasicCredentials = Depends(security),
+) -> None:
+    auth = httpx.BasicAuth(username=credentials.username, password=credentials.password)
+
+    async with httpx.AsyncClient(auth=auth) as client:
+        response = await client.get("http://auth-service:8001/get_current_user")
+    return response.json()
